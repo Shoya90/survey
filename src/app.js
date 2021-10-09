@@ -1,9 +1,9 @@
 const express = require('express')
 const http = require('http')
-const { errors} = require('celebrate')
+const { errors } = require('celebrate')
 
-const surveyRouter = require('./routes/survey.route')
-const answerRouter = require('./routes/answer.route')
+const surveyRouter = require('./route/survey.route')
+const answerRouter = require('./route/answer.route')
 
 require('./init/mongo')
 
@@ -22,7 +22,7 @@ app.use(errors()) // validation error handler
 app.use(errorHandler)
 
 function errorHandler(err, req, res, next) { // eslint-disable-line no-unused-vars
-    const status = err.status || err.code || 500
+    const status = err.status || 500
 
     res.status(status)
     res.send({

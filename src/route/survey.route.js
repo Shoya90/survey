@@ -10,7 +10,7 @@ const router = new Router()
 router.post('/new', celebrate({
     [Segments.BODY]: Joi.object().keys({
         question: Joi.string().required(),
-        options: Joi.array().items(Joi.string())
+        options: Joi.array().items(Joi.string()).required()
     })
 }), async (req, res) => {
     const { question, options } = req.body

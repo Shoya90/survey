@@ -10,11 +10,11 @@ async function createSurvey(survey) {
 async function getSurvey(id) {
     if(!ObjectId.isValid(id)) {
         const err = new Error('No survey found for this id')
-        err.code = 404
+        err.status = 404
         throw err
     }
 
-    const survey = await surveyModel.findById(id)
+    const survey = await surveyModel.findById(id).lean()
     return survey
 }
 

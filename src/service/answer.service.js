@@ -13,11 +13,11 @@ async function answerSurvey(surveyId, answer) {
 async function getAnswersBySurveyId(surveyId) {
     if(!ObjectId.isValid(surveyId)) {
         const err = new Error('No survey found for this id')
-        err.code = 404
+        err.status = 404
         throw err
     }
 
-    const answers = await answerModel.find({ surveyId })
+    const answers = await answerModel.find({ surveyId }).lean()
     return answers
 }
 
