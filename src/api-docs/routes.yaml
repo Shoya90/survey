@@ -1,0 +1,201 @@
+/survey/new:
+ post:
+   summary: Creates a new survey
+   description: |
+    This endpoint creates a surveys consisting of a question and possible answers.    
+    A Survey consists of a questions and 2 or more possible answers.
+
+   tags: [ "Survey" ]
+   requestBody:
+    required: true
+    content: 
+      application/json:
+        schema:
+          type: object
+          properties:
+            question:
+              type: string
+              example: what is yor favorite color?
+            options:
+              type: [string]
+              example: ['Red', 'Green', 'Blue', 'Khaki']
+   responses:
+     '200':
+       description: Successfully crearted the survey.
+       content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 6161b919b598f50232626c60
+     '500':
+       description: Internal server error
+
+/answer/{surveyId}/new:
+ post:
+   summary: Creates a new answer for a survey.
+   description: |
+    This endpoint creates an answer for a given surrvey.   
+    Answer can only be from the possible answers allowed in the survey.
+   tags: [ "Answer" ]
+   parameters:
+     - in: path
+       name: surveyId
+       required: true
+       schema:
+         type: string
+         description: The surveyId this answer belongs to
+   requestBody:
+    required: true
+    content: 
+      application/json:
+        schema:
+          type: object
+          properties:
+            answer:
+              type: string
+              example: Green
+   responses:
+     '200':
+       description: Successfully submitted the answer.
+       content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: 6161b910b598f50232626c5d
+
+     '404':
+       description: No survey found for this id
+       content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+                example: 404
+              message:
+                type: string
+                example: No survey found for this id
+              error: 
+                type: string
+                example: Not Found
+
+     '500':
+       description: Internal server error
+
+/answer/{surveyId}/results:
+ get:
+   summary: Gets the results of a survey.
+   description: |
+    This endpoint fetches the results of a survey.   
+    The returned object will contain both the survey and all the submitted answers.
+   tags: [ "Answer" ]
+   parameters:
+     - in: path
+       name: surveyId
+       required: true
+       schema:
+         type: string
+         description: The surveyId to get the results for
+   responses:
+     '200':
+       description: Successfully fetched the results.
+       content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  survey:
+                    type: object
+                    properties:
+                      _id: 
+                        type: string
+                        example: 6161b910b598f50232626c5d
+                      question:
+                        type: string
+                        example: what is yor favorite color?
+                      options:
+                        type: [string]
+                        example: ['Red', 'Green', 'Blue', 'Khaki']
+                      createdAt: 
+                        type: string
+                        format: date-time
+                        example: '2021-10-09T15:45:20.436Z'
+                      updatedAt: 
+                        type: string
+                        format: date-time
+                        example: '2021-10-09T15:45:20.436Z'
+                  answers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id: 
+                          type: string
+                          example: 6161b910b598f50232626c5d
+                        surveyId:
+                          type: string
+                          example: 6161b919b598f50232626c60
+                        answer:
+                          type: string
+                          example: Red
+                        createdAt: 
+                          type: string
+                          format: date-time
+                          example: '2021-10-09T15:45:20.436Z'
+                        updatedAt: 
+                          type: string
+                          format: date-time
+                          example: '2021-10-09T15:45:20.436Z'
+
+     '404':
+       description: No survey found for this id
+       content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+                example: 404
+              message:
+                type: string
+                example: No survey found for this id
+              error: 
+                type: string
+                example: Not Found
+
+     '400':
+       description: Invalid answer
+       content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: Invalid answer
+              error: 
+                type: string
+                example: Bad request
+                  
+     '500':
+       description: Internal server error

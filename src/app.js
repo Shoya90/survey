@@ -1,9 +1,12 @@
 const express = require('express')
 const http = require('http')
 const { errors } = require('celebrate')
+const swaggerUi = require('swagger-ui-express')
+const swaggerJsDoc = require('swagger-jsdoc')
 
 const surveyRouter = require('./route/survey.route')
 const answerRouter = require('./route/answer.route')
+const openApiSConfig = require('./api-docs/config')
 
 require('./init/mongo')
 
@@ -14,6 +17,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 app.get('/-/ping', (req, res) => res.sendStatus(200).end())
+
+app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsDoc(openApiSConfig)))
 
 app.use('/api/v1/survey', surveyRouter)
 app.use('/api/v1/answer', answerRouter)

@@ -29,6 +29,8 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "http-errors": "^1.8.0",
-    "mongoose": "^5.13.10"
+    "mongoose": "^5.13.10",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
   }
 }
