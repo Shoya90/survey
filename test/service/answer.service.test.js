@@ -6,7 +6,7 @@ const answerModel = require('../../src/model/answer.model')
 
 test.before(async () => {
     const randomDbName = Math.random().toString(36).substring(7)
-    const mongoConnectionString = process.env['MONGO_CONNECTION_STRING'] || 'mongodb:27017'
+    const mongoConnectionString = process.env.MONGO_CONNECTION_STRING || 'mongodb:27017'
     await mongoose.connect(`mongodb://${mongoConnectionString}/test-${randomDbName}`, {
         useNewUrlParser: true,
         useUnifiedTopology: true,

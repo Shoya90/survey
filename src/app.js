@@ -3,6 +3,7 @@ const http = require('http')
 const { errors } = require('celebrate')
 const swaggerUi = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
+const helmet = require("helmet")
 
 const surveyRouter = require('./route/survey.route')
 const answerRouter = require('./route/answer.route')
@@ -12,7 +13,7 @@ require('./init/mongo')
 
 const app = express()
 const server = http.createServer(app)
-
+app.use(helmet())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 

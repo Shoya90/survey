@@ -141,3 +141,21 @@ test.serial('getSurveyAnswers throws error for invalid surveyId', async t => {
     
     t.is(getAnswersBySurveyIdStub.callCount, 0)
 })
+
+test.serial('getSurveyAnswers throws error for if survey not found', async t => {
+    const surveyId = 'invalid-id'
+        
+    const getSurveyStub = sinon.stub(surveyService, 'getSurvey').returns(null)
+
+    const getAnswersBySurveyIdStub = sinon.stub(answerService, 'getAnswersBySurveyId')
+
+    const error = await t.throwsAsync(answerController.getSurveyAnswers(surveyId))
+
+    t.is(error.message, 'No survey found for this id')
+    t.is(error.status, 404)
+
+    t.is(getSurveyStub.callCount, 1)
+    t.is(getSurveyStub.firstCall.args[0], surveyId)
+    
+    t.is(getAnswersBySurveyIdStub.callCount, 0)
+})

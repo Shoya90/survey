@@ -16,6 +16,11 @@ async function answerSurvey(surveyId, answer) {
 
 async function getSurveyAnswers(surveyId) {
     const survey = await surveyService.getSurvey(surveyId)
+    if(!survey) {
+        const err = new Error('No survey found for this id')
+        err.status = 404
+        throw err
+    }
     const answers = await answerService.getAnswersBySurveyId(surveyId)
 
     return {
