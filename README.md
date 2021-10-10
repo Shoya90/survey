@@ -32,6 +32,33 @@ Choose an endpoint and click on **Try it out**, fill the required fields and **E
 &nbsp;
 
 ---
+
+## Sending requests manually
+In case you want to not use swagger to make api calls, you can use `cURL` instead.
+- to create a new survey:
+    ```
+    curl --header "Content-Type: application/json" \
+         --request POST \
+         --data '{"question":"What is your favorite color?", "options":["Red","Green","Blue"]}' \
+         http://localhost:3000/api/v1/survey/new 
+    ```
+- to answer a survey:    
+    ```
+    curl --header "Content-Type: application/json" \
+         --request POST \
+         --data '{"answer":"Red"}' \
+         http://localhost:3000/api/v1/answer/<survey_id>/new 
+    ```
+- to get the results of a survey:    
+    ```
+    curl --header "Content-Type: application/json" \
+         --request GET \
+         http://localhost:3000/api/v1/answer/<survey_id>/results 
+    ```
+
+&nbsp;
+
+---
     
 ## How to run the unit tests
 The tests (for the services) also require a mongodb instance to be running.  

@@ -4,7 +4,7 @@ const openApiCofig = {
       info: {
         title: 'Surveys',
         version: '1.0.0',
-        description: 'Create and aswer surveys, fetch the results'
+        description: 'Create and answer surveys, fetch the results'
       },
       servers: [
           {
