@@ -40,20 +40,20 @@ In case you want to not use swagger to make api calls, you can use `cURL` instea
     curl --header "Content-Type: application/json" \
          --request POST \
          --data '{"question":"What is your favorite color?", "options":["Red","Green","Blue"]}' \
-         http://localhost:3000/api/v1/survey/new 
+         http://localhost:3000/api/v1/survey 
     ```
 - to answer a survey:    
     ```
     curl --header "Content-Type: application/json" \
          --request POST \
          --data '{"answer":"Red"}' \
-         http://localhost:3000/api/v1/answer/<survey_id>/new 
+         http://localhost:3000/api/v1/survey/<survey_id>/answer 
     ```
 - to get the results of a survey:    
     ```
     curl --header "Content-Type: application/json" \
          --request GET \
-         http://localhost:3000/api/v1/answer/<survey_id>/results 
+         http://localhost:3000/api/v1/survey/<survey_id>/results 
     ```
 
 &nbsp;

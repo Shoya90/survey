@@ -6,7 +6,6 @@ const swaggerJsDoc = require('swagger-jsdoc')
 const helmet = require("helmet")
 
 const surveyRouter = require('./route/survey.route')
-const answerRouter = require('./route/answer.route')
 const openApiSConfig = require('./api-docs/config')
 
 require('./init/mongo')
@@ -22,7 +21,6 @@ app.get('/-/ping', (req, res) => res.sendStatus(200).end())
 app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsDoc(openApiSConfig)))
 
 app.use('/api/v1/survey', surveyRouter)
-app.use('/api/v1/answer', answerRouter)
 
 app.use(errors()) // validation error handler
 app.use(errorHandler)

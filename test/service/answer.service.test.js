@@ -23,18 +23,19 @@ test.after(async () => {
     await mongoose.connection.db.dropDatabase()
 })
 
-test.serial('answerSurvey creates new answer and returns id', async t => {
+test.serial('answerSurvey creates and returns new answer', async t => {
     const surveyId = mongoose.Types.ObjectId()
 
     const res = await answerService.answerSurvey(surveyId, 'banana')
 
-    t.true(mongoose.Types.ObjectId.isValid(res))
+    t.is(res.answer, 'banana')
+    t.is(res.surveyId, surveyId.toHexString())
 
     const allAnswers = await answerModel.find()
     t.is(allAnswers.length, 1)
 })
 
-test.serial('getAnswersBySurveyId returns restuls', async t => {
+test.serial('getAnswersBySurveyId returns paginated restuls', async t => {
     // create some answers
     const surveyId = mongoose.Types.ObjectId()
     const anotherSurveyId = mongoose.Types.ObjectId()
@@ -47,16 +48,27 @@ test.serial('getAnswersBySurveyId returns restuls', async t => {
 
     // get answers
     const res = await answerService.getAnswersBySurveyId(surveyId)
-    
-    t.is(res.length, 3)
+    t.is(res.answers.length, 3)
 
-    for(let index in res) {
-        t.true(res[index].surveyId == surveyId)
+    for(let index in res.answers) {
+        t.true(res.answers[index].surveyId == surveyId)
     }
 
-    t.true(res[0].answer == 'banana')
-    t.true(res[1].answer == 'apple')
-    t.true(res[2].answer == 'ananas')
+    t.true(res.answers[0].answer == 'ananas')
+    t.true(res.answers[1].answer == 'apple')
+    t.true(res.answers[2].answer == 'banana')
+
+    t.deepEqual(res.pagination, {
+        totalDocs: 3,
+        limit: 100,
+        totalPages: 1,
+        page: 1,
+        pagingCounter: 1,
+        hasPrevPage: false,
+        hasNextPage: false,
+        prevPage: null,
+        nextPage: null 
+    })
 })
 
 test.serial('getAnswersBySurveyId throws error for invalid surveyId', async t => {

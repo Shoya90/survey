@@ -4,7 +4,7 @@ const surveyModel = require ('../model/survey.model')
 
 async function createSurvey(survey) {
     const newSurvey = await surveyModel.create(survey)
-    return newSurvey._id
+    return newSurvey.toObject()
 }
 
 async function getSurvey(id) {

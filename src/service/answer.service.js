@@ -7,17 +7,17 @@ async function answerSurvey(surveyId, answer) {
         surveyId,
         answer
     })
-    return newAnswer._id
+    return newAnswer.toObject()
 }
 
-async function getAnswersBySurveyId(surveyId) {
+async function getAnswersBySurveyId(surveyId, pagination) {
     if(!ObjectId.isValid(surveyId)) {
         const err = new Error('No survey found for this id')
         err.status = 404
         throw err
     }
 
-    const answers = await answerModel.find({ surveyId }).lean()
+    const answers = await answerModel.paginate({ surveyId }, pagination)
     return answers
 }
 

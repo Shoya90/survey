@@ -23,14 +23,16 @@ test.after(async () => {
     await mongoose.connection.db.dropDatabase()
 })
 
-test.serial('createSurvey creates survey and retunrs id', async t => {
+test.serial('createSurvey creates and returns new survey', async t => {
     const survey = {
         question: 'what is your favorite friut?',
         options: ['banana', 'apple', 'ananas']
     }
 
     const res = await surveyService.createSurvey(survey)
-    t.true(mongoose.Types.ObjectId.isValid(res))
+    
+    t.is(res.question, survey.question)
+    t.deepEqual(res.options, survey.options)
 
     const allSurveys = await surveyModel.find()
     t.is(allSurveys.length, 1)

@@ -1,4 +1,4 @@
-/survey/new:
+/survey:
  post:
    summary: Creates a new survey
    description: |
@@ -30,19 +30,67 @@
               data:
                 type: object
                 properties:
-                  _id:
+                  survey:
+                    type: object
+                    properties:
+                      question:
+                        type: string
+                        example: What is your favorite color?
+                      options: 
+                        type: array
+                        example: ['Red', 'Green', 'Blue', 'Khaki']
+                      _id:
+                        type: string
+                        example: 6161b919b598f50232626c60
+                      createdAt: 
+                          type: string
+                          format: date-time
+                          example: '2021-10-09T15:45:20.436Z'
+                      updatedAt: 
+                        type: string
+                        format: date-time
+                        example: '2021-10-09T15:45:20.436Z'
+     '400':
+       description: Validation error
+       content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode: 
+                type: number
+                example: 400
+              error: 
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Validation failed
+              validation:
+                type: object
+                properties:
+                  body:
+                    type: object
+                    properties:
+                      source:
+                        type: string
+                        example: body
+                      keys: 
+                        type: array
+                        example: [question]
+                  source:
                     type: string
-                    example: 6161b919b598f50232626c60
+                    example: \question\ is required
      '500':
        description: Internal server error
 
-/answer/{surveyId}/new:
+/survey/{surveyId}/answer:
  post:
    summary: Creates a new answer for a survey.
    description: |
     This endpoint creates an answer for a given surrvey.   
     Answer can only be from the possible answers allowed in the survey.
-   tags: [ "Answer" ]
+   tags: [ "Survey" ]
    parameters:
      - in: path
        name: surveyId
@@ -71,10 +119,57 @@
               data:
                 type: object
                 properties:
-                  _id:
+                  answer:
+                    type: object
+                    properties:
+                      answer: 
+                        type: string
+                        example: Red
+                      _id:
+                        type: string
+                        example: 61637cfa76ba4839f50693e6
+                      surveyId:
+                        type: string
+                        example: 61637cdd76ba4839f5069386
+                      createdAt: 
+                          type: string
+                          format: date-time
+                          example: '2021-10-09T15:45:20.436Z'
+                      updatedAt: 
+                        type: string
+                        format: date-time
+                        example: '2021-10-09T15:45:20.436Z'
+     '400':
+       description: Validation error
+       content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode: 
+                type: number
+                example: 400
+              error: 
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Validation failed
+              validation:
+                type: object
+                properties:
+                  body:
+                    type: object
+                    properties:
+                      source:
+                        type: string
+                        example: body
+                      keys: 
+                        type: array
+                        example: [question]
+                  source:
                     type: string
-                    example: 6161b910b598f50232626c5d
-
+                    example: \answer\ is required
      '404':
        description: No survey found for this id
        content:
@@ -95,13 +190,13 @@
      '500':
        description: Internal server error
 
-/answer/{surveyId}/results:
+/survey/{surveyId}/results:
  get:
-   summary: Gets the results of a survey.
+   summary: Gets the paginated results of a survey
    description: |
     This endpoint fetches the results of a survey.   
-    The returned object will contain both the survey and all the submitted answers.
-   tags: [ "Answer" ]
+    The response will be paginated. The default limit is 100.
+   tags: [ "Survey" ]
    parameters:
      - in: path
        name: surveyId
@@ -109,6 +204,18 @@
        schema:
          type: string
          description: The surveyId to get the results for
+     - in: query
+       name: page
+       required: false
+       schema:
+         type: number
+         description: 1
+     - in: query
+       name: limit
+       required: false
+       schema:
+         type: number
+         description: 20
    responses:
      '200':
        description: Successfully fetched the results.
@@ -120,26 +227,6 @@
               data:
                 type: object
                 properties:
-                  survey:
-                    type: object
-                    properties:
-                      _id: 
-                        type: string
-                        example: 6161b910b598f50232626c5d
-                      question:
-                        type: string
-                        example: what is yor favorite color?
-                      options:
-                        type: [string]
-                        example: ['Red', 'Green', 'Blue', 'Khaki']
-                      createdAt: 
-                        type: string
-                        format: date-time
-                        example: '2021-10-09T15:45:20.436Z'
-                      updatedAt: 
-                        type: string
-                        format: date-time
-                        example: '2021-10-09T15:45:20.436Z'
                   answers:
                     type: array
                     items:
@@ -162,7 +249,33 @@
                           type: string
                           format: date-time
                           example: '2021-10-09T15:45:20.436Z'
-
+                  totalDocs:
+                    type: number
+                    example: 1
+                  limit:  
+                    type: number
+                    example: 20
+                  page:  
+                    type: number
+                    example: 1
+                  totalPages:  
+                    type: number
+                    example: 1
+                  pagingCounter:
+                    type: number
+                    example: 1
+                  hasPrevPage:
+                    type: boolean
+                    example: false
+                  hasNextPage:
+                    type: boolean
+                    example: false
+                  prevPage:
+                    type: number
+                    example: null
+                  nextPage:
+                    type: number
+                    example: null
      '404':
        description: No survey found for this id
        content:
